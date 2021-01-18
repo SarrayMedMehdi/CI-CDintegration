@@ -217,9 +217,6 @@ public class ControllerEmployeImpl  {
 		return employeService.getAllEmployeNamesJPQL();
 	}
 
-	public List<Employe> getAllEmployeByEntreprise(Entreprise entreprise) {
-		return employeService.getAllEmployeByEntreprise(entreprise);
-	}
 
 	public void mettreAjourEmailByEmployeIdJPQL(String email, int employeId) {	
 		employeService.mettreAjourEmailByEmployeIdJPQL(email, employeId);
