@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ import tn.esprit.spring.repository.TimesheetRepository;
 
 @Service
 public class EmployeServiceImpl implements IEmployeService {
+	
+	Logger logger = LogManager.getLogger(EmployeServiceImpl.class);
 
 	@Autowired
 	EmployeRepository employeRepository;
@@ -33,11 +37,13 @@ public class EmployeServiceImpl implements IEmployeService {
 
 	@Override
 	public Employe authenticate(String login, String password) {
+		logger.debug("Attempting to authentificate user with login : {} ,password : {}", login, password);
 		return employeRepository.getEmployeByEmailAndPassword(login, password);
 	}
 
 	@Override
 	public int addOrUpdateEmploye(Employe employe) {
+		logger.debug("Adding or updating Employe {}", employe);
 		employeRepository.save(employe);
 		return employe.getId();
 	}
@@ -52,9 +58,12 @@ public class EmployeServiceImpl implements IEmployeService {
 
 		
 	public void affecterEmployeADepartement(int employeId, int depId) { 
+		logger.debug("Searching for the departement with id : {}", depId);
 		Departement d = deptRepoistory.findById(depId).get();
+		logger.debug("Searching for employe with id {}", employeId);
 		Employe e = employeRepository.findById(employeId).get();
 		// Employe et le fils (contient le mappedBy) donc : 
+		logger.debug("Affecting the Employe : {} to it 's departement", e);
 		d.getEmployes().add(e);
 	}
 	
@@ -63,7 +72,7 @@ public class EmployeServiceImpl implements IEmployeService {
 	{
 		Departement dep = deptRepoistory.findById(depId).get();
 		Employe empl = employeRepository.findById(employeId).get();
-		
+		logger.debug("Removing the Employe with id : {} from the departement ", employeId);
 		dep.getEmployes().remove(empl);
 		
 
