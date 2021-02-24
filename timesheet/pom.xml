@@ -106,7 +106,7 @@
 
 
 	<build>
-		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+		<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
