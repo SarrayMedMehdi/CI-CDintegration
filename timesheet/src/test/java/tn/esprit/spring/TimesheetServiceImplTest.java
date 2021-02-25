@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class TimesheetServiceImplTest {
 	
 	@BeforeEach
 	private void deleteRecords(){
+		logger.info("Clean records");
 		missionRepository.deleteAll();
 		deptRepoistory.deleteAll();
 	}
@@ -42,6 +44,8 @@ public class TimesheetServiceImplTest {
 	void testAjouterMission() {
 		logger.info("Creating the Mission instance");
 		Mission mission = new Mission();
+		mission.setDescription("desc");
+		mission.setName("name");
 		int	result = timesheet.ajouterMission(mission);
 		logger.info("Add mission executed");
 		Assertions.assertTrue(result > 0);
@@ -49,13 +53,16 @@ public class TimesheetServiceImplTest {
 	
 	@Test
 	void testAffecterMissionADepartement() {
-		logger.info("Affect Mission to Departement");
+		logger.info("Creating the Mission instance");
 		Mission mission = new Mission();
 		int	idMissionInserted = timesheet.ajouterMission(mission);
+		logger.info("Creating the Department instance");
 		Departement departement = new Departement();
 		Departement	departementInserted = departementService.addOrUpdateDep(departement);
+		logger.info("Affect Mission to Departement");
 		timesheet.affecterMissionADepartement(idMissionInserted, departementInserted.getId());
 		Mission missionAfect = missionRepository.findById(idMissionInserted).get();
+		logger.info("checking the mission");
 		Assertions.assertNotNull(missionAfect.getDepartement());
 		logger.info("Affect Mission to Departement executed");
 	}
